@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Better Controls</title>
+  </head>
+
+  <script>
+    const RESOURCE_NAME =
+      'GetParentResourceName' in window
+        ? GetParentResourceName()
+        : 'better-controls-fivem';
+
+    /**
+     * @param {string} event
+     * @param {any} data?
+     * @returns {Promise<any>}
+     */
+    async function fetchNui(event, data) {
+      const resp = await fetch(`https://${RESOURCE_NAME}/${event}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!resp.ok) {
+        return;
+      }
+
+      return await resp.json();
+    }
+
+    window.addEventListener('keyup', ({ key, altKey, ctrlKey, shiftKey }) => {
+      fetchNui('KeyUp', { key, altKey, ctrlKey, shiftKey });
+    });
+
+    window.addEventListener('keydown', ({ key, altKey, ctrlKey, shiftKey }) => {
+      fetchNui('KeyDown', { key, altKey, ctrlKey, shiftKey });
+    });
+  </script>
+</html>
